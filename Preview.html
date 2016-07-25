@@ -17,7 +17,7 @@
 				format.addEventListener('input', setResult);
 
 				function setResult(){
-				  result.innerHTML = format.value + '(' + value.value + ')';
+				  console.log(window.mxk.DataFormatter.tokenize(format.value));
 				}
 			}
 		</script>

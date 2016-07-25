@@ -1,5 +1,5 @@
 window.mxk = {};
-window.mxk.DataFormatter;
+window.mxk.DataFormatter = {};
 
 (function(DataFormatter) {
     DataFormatter.Token = {};
@@ -16,6 +16,7 @@ window.mxk.DataFormatter;
         PERCENTAGE: 'Percentage',
         EMPTY_PLACEHOLDER: 'EmptyPlaceHolder',
         CELL_FILL: 'CellFill',
+        CONDITION: 'Condition',
         PLAIN_TEXT: 'PlainText',
         ERROR: 'Error'
     };
@@ -229,10 +230,68 @@ window.mxk.DataFormatter;
                 next: next + 2
             }
         },
+        '[': function(index, array) {
+            var next = index + 1;
+            var condition = '';
+            while (!!array[next] && array[next] !== ']') {
+                condition += array[next++];
+            }
+            var token;
+            if (!array[next]) {
+                token = {
+                    type: DataFormatter.Token.Type.ERROR,
+                    reason: '"[" must be closed'
+                };
+            } else {
+                token = {
+                    type: DataFormatter.Token.Type.CONDITION,
+                    condition: condition
+                }
+            }
+            return {
+                token: token,
+                next: next
+            };
+        },
+        default: function(index, array) {
+            return {
+                token: {
+                    type: DataFormatter.Token.Type.PLAIN_TEXT,
+                    text: array[index]
+                },
+                next: index + 1
+            };
+        }
     }
 
     DataFormatter.getFormatter = function(pattern) {
 
+    };
+
+    DataFormatter.tokenize = function(pattern) {
+        var length = pattern.length;
+        var tokens = [];
+        var preTextToken;
+        for (var i = 0; i < length;) {
+            var result = (DataFormatter.CharHandler[pattern[i]] || DataFormatter.CharHandler.default)(i, pattern);
+            if (result.token.type === DataFormatter.Token.Type.ERROR) {
+                return result.token;
+            } else {
+                if (result.token.type === DataFormatter.Token.Type.PLAIN_TEXT) {
+                    if (!!preTextToken) {
+                        preTextToken.text += result.token.text;
+                    } else {
+                        preTextToken = result.token;
+                    }
+                } else {
+                    !!preTextToken && tokens.push(preTextToken);
+                    preTextToken = null;
+                    tokens.push(result.token);
+                }
+            }
+            i = result.next;
+        }!!preTextToken && tokens.push(preTextToken);
+        return tokens;
     };
 
     var IntegerFormatter = function(pattern) {
@@ -240,14 +299,6 @@ window.mxk.DataFormatter;
         this.valid_ = false;
         this.tokens_ = [];
     };
-
-    IntegerFormatter.ErrorChar = [
-        ['d', 'h', 'm', 's', 'y', '.', '@', ',', ';', '%', '/', '[', ']'],
-        ['E+', 'E-'],
-        ['a/p'],
-        [],
-        ['am/pm']
-    ];
 
     IntegerFormatter.prototype.format = function(number) {
 
