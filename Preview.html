@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>DataFormatter Preview</title>
+		<script src="dataformatter.js"></script>
+		<link rel="stylesheet" href="preview.css">
+	</head>
+
+	<body>
+		<script>
+			window.onload = function(){
+				var value = document.getElementById('value');
+				var format = document.getElementById('format');
+				var result = document.getElementById('result');
+
+				value.addEventListener('input', setResult);
+				format.addEventListener('input', setResult);
+
+				function setResult(){
+				  result.innerHTML = format.value + '(' + value.value + ')';
+				}
+			}
+		</script>
+
+		<p>
+			<input id="value" type="text" placeholder="value"/>
+		</p>
+		<p>
+			<input id="format" type="text" placeholder="format"/>
+		</p>
+		<div id="result"></div>
+	</body>
+</html>

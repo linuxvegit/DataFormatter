@@ -1,0 +1,10 @@
+input {
+  width: 100%;
+}
+
+div {
+  border: 1px solid #aaa;
+  padding: 4px;
+  height: 18px;
+  margin-right: -4px;
+}
