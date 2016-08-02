@@ -6,6 +6,7 @@
 		<script src="token-type.js"></script>
 		<script src="token-char-handler.js"></script>
 		<script src="dataformatter.js"></script>
+		<script src="dataformatter-integer.js"></script>
 		<link rel="stylesheet" href="preview.css">
 	</head>
 
@@ -20,7 +21,9 @@
 				format.addEventListener('input', setResult);
 
 				function setResult(){
-				  console.log(window.mxk.DataFormatter.tokenize(format.value));
+				  var tokens = window.mxk.DataFormatter.tokenize(format.value);
+				  var r = window.mxk.DataFormatter.IntergerFormatter.format(tokens, Number(value.value), true);
+				  result.innerHTML =  r;
 				}
 			}
 		</script>
