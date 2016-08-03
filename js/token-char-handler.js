@@ -1,52 +1,45 @@
-window.mxk = window.mxk || {};
-window.mxk.DataFormatter = window.mxk.DataFormatter || {};
-window.mxk.DataFormatter.Token = window.mxk.DataFormatter.Token || {};
-
-(function(Token) {
-    var DataFormatter = window.mxk.DataFormatter;
-    var Type = Token.Type;
-
-    Token.CharHandler = {
+define(['token-type', 'token-create'], function(Type, create) {
+    return {
         '0': function(index, array) {
             return {
-                token: Token.create(Type.NUMBER_PLACEHOLDER, '0'),
+                token: create(Type.NUMBER_PLACEHOLDER, '0'),
                 next: index + 1
             };
         },
         '#': function(index, array) {
             return {
-                token: Token.create(Type.NUMBER_PLACEHOLDER, ''),
+                token: create(Type.NUMBER_PLACEHOLDER, ''),
                 next: index + 1
             };
         },
         '?': function(index, array) {
             return {
-                token: Token.create(Type.NUMBER_PLACEHOLDER, ' '),
+                token: create(Type.NUMBER_PLACEHOLDER, ' '),
                 next: index + 1
             };
         },
         '@': function(index, array) {
             return {
-                token: Token.create(Type.TEXT_PLACEHOLDER, ''),
+                token: create(Type.TEXT_PLACEHOLDER, ''),
                 next: index + 1
             };
         },
         '.': function(index, array) {
             return {
-                token: Token.create(Type.DECIMAL_POINT),
+                token: create(Type.DECIMAL_POINT),
                 next: index + 1
             };
         },
         'E': function(index, array) {
             var token, next;
             if (array[index + 1] === '+') {
-                token = Token.create(Type.POSI_SCIENTIFIC);
+                token = create(Type.POSI_SCIENTIFIC);
                 next = index + 2;
             } else if (array[index + 1] === '-') {
-                token = Token.create(Type.NEGO_SCIENTIFIC);
+                token = create(Type.NEGO_SCIENTIFIC);
                 next = index + 2;
             } else {
-                token = Token.create(Type.PLAIN_TEXT, 'E');
+                token = create(Type.PLAIN_TEXT, 'E');
                 next = index + 1
             }
             return {
@@ -56,13 +49,13 @@ window.mxk.DataFormatter.Token = window.mxk.DataFormatter.Token || {};
         },
         '/': function(index, array) {
             return {
-                token: Token.create(Type.FRACTION),
+                token: create(Type.FRACTION),
                 next: index + 1
             };
         },
         ';': function(index, array) {
             return {
-                token: Token.create(Type.SECTION_SEPERATOR),
+                token: create(Type.SECTION_SEPERATOR),
                 next: index + 1
             };
         },
@@ -72,13 +65,13 @@ window.mxk.DataFormatter.Token = window.mxk.DataFormatter.Token || {};
                 next++;
             }
             return {
-                token: Token.create(Type.THOUSAND_SEPERATOR),
+                token: create(Type.THOUSAND_SEPERATOR),
                 next: next
             };
         },
         '%': function(index, array) {
             return {
-                token: Token.create(Type.PERCENTAGE),
+                token: create(Type.PERCENTAGE),
                 next: index + 1
             };
         },
@@ -90,9 +83,9 @@ window.mxk.DataFormatter.Token = window.mxk.DataFormatter.Token || {};
             }
             var token;
             if (!array[next]) {
-                token = Token.create(Type.ERROR, 'quote does not close');
+                token = create(Type.ERROR, 'quote does not close');
             } else {
-                token = Token.create(Type.PLAIN_TEXT, text);
+                token = create(Type.PLAIN_TEXT, text);
             }
             return {
                 token: token,
@@ -103,9 +96,9 @@ window.mxk.DataFormatter.Token = window.mxk.DataFormatter.Token || {};
             var nextText = array[index + 1];
             var token;
             if (!nextText) {
-                token = Token.create(Type.ERROR, 'No character to escape');
+                token = create(Type.ERROR, 'No character to escape');
             } else {
-                token = Token.create(Type.PLAIN_TEXT, nextText);
+                token = create(Type.PLAIN_TEXT, nextText);
             }
             return {
                 token: token,
@@ -116,9 +109,9 @@ window.mxk.DataFormatter.Token = window.mxk.DataFormatter.Token || {};
             var nextText = array[index + 1];
             var token;
             if (!nextText) {
-                token = Token.create(Type.ERROR, 'No character to escape');
+                token = create(Type.ERROR, 'No character to escape');
             } else {
-                token = Token.create(Type.PLAIN_TEXT, nextText);
+                token = create(Type.PLAIN_TEXT, nextText);
             }
             return {
                 token: token,
@@ -129,9 +122,9 @@ window.mxk.DataFormatter.Token = window.mxk.DataFormatter.Token || {};
             var nextText = array[index + 1];
             var token;
             if (!nextText) {
-                token = Token.create(Type.ERROR, 'No character to escape');
+                token = create(Type.ERROR, 'No character to escape');
             } else {
-                token = Token.create(Type.CELL_FILL, nextText);
+                token = create(Type.CELL_FILL, nextText);
             }
             return {
                 token: token,
@@ -146,9 +139,9 @@ window.mxk.DataFormatter.Token = window.mxk.DataFormatter.Token || {};
             }
             var token;
             if (!array[next]) {
-                token = Token.create(Type.ERROR, '"[" must be closed');
+                token = create(Type.ERROR, '"[" must be closed');
             } else {
-                token = Token.create(Type.CONDITION, condition);
+                token = create(Type.CONDITION, condition);
             }
             return {
                 token: token,
@@ -163,15 +156,15 @@ window.mxk.DataFormatter.Token = window.mxk.DataFormatter.Token || {};
                 count++;
             }
             return {
-                token: Token.create(Type.MINUTE_MONTH, count),
+                token: create(Type.MINUTE_MONTH, count),
                 next: next
             };
         },
         default: function(index, array) {
             return {
-                token: Token.create(Type.PLAIN_TEXT, array[index]),
+                token: create(Type.PLAIN_TEXT, array[index]),
                 next: index + 1
             };
         }
-    };
-})(window.mxk.DataFormatter.Token);
+    }
+});

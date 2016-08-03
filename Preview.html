@@ -2,38 +2,18 @@
 <html>
 	<head>
 		<title>DataFormatter Preview</title>
-		<script src="token.js"></script>
-		<script src="token-type.js"></script>
-		<script src="token-char-handler.js"></script>
-		<script src="dataformatter.js"></script>
-		<script src="dataformatter-integer.js"></script>
+		<script src="js/require.js" defer async="true"></script>
+		<script src="js/require.js" data-main="js/main"></script>
 		<link rel="stylesheet" href="preview.css">
 	</head>
 
 	<body>
-		<script>
-			window.onload = function(){
-				var value = document.getElementById('value');
-				var format = document.getElementById('format');
-				var result = document.getElementById('result');
-
-				value.addEventListener('input', setResult);
-				format.addEventListener('input', setResult);
-
-				function setResult(){
-				  var tokens = window.mxk.DataFormatter.tokenize(format.value);
-				  var r = window.mxk.DataFormatter.IntergerFormatter.format(tokens, Number(value.value), true);
-				  result.innerHTML =  r;
-				}
-			}
-		</script>
-
 		<p>
 			<input id="value" type="text" placeholder="value"/>
 		</p>
 		<p>
 			<input id="format" type="text" placeholder="format"/>
 		</p>
-		<div id="result"></div>
+		<div id="result" style="white-space: pre;"></div>
 	</body>
 </html>

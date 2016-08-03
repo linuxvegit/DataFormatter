@@ -1,9 +1,5 @@
-window.mxk = window.mxk || {};
-window.mxk.DataFormatter = window.mxk.DataFormatter || {};
-window.mxk.DataFormatter.Token = window.mxk.DataFormatter.Token || {};
-
-(function(Token) {
-    Token.create = function(type, data) {
+define(function() {
+    return function(type, data) {
         return {
             set type(t) {
                 type = t;
@@ -19,4 +15,4 @@ window.mxk.DataFormatter.Token = window.mxk.DataFormatter.Token || {};
             }
         };
     };
-})(window.mxk.DataFormatter.Token);
+});

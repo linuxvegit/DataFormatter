@@ -1,9 +1,5 @@
-window.mxk = window.mxk || {};
-window.mxk.DataFormatter = window.mxk.DataFormatter || {};
-window.mxk.DataFormatter.Token = window.mxk.DataFormatter.Token || {};
-
-(function(Token) {
-    Token.Type = {
+define(function() {
+    return {
         NUMBER_PLACEHOLDER: 'NumberPlaceHolder',
         TEXT_PLACEHOLDER: 'TextPlaceHolder',
         DECIMAL_POINT: 'DecimalPoint',
@@ -20,4 +16,4 @@ window.mxk.DataFormatter.Token = window.mxk.DataFormatter.Token || {};
         PLAIN_TEXT: 'PlainText',
         ERROR: 'Error'
     };
-})(window.mxk.DataFormatter.Token);
+})

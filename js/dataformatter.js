@@ -1,35 +1,26 @@
-window.mxk = window.mxk || {};
-window.mxk.DataFormatter = window.mxk.DataFormatter || {};
-
-(function(DataFormatter) {
-
-    DataFormatter.DateSymbol = {
+define(['integerformatter', 'token', 'util'], function(IntegerFormatter, Token, Util) {
+    var DateSymbol = {
         MONTH: 'm',
         DATE: 'd',
         YEAR: 'y'
     };
 
-    DataFormatter.TimeSymbol = {
+    var TimeSymbol = {
         HOUR: 'h',
         MINUS: 'm',
         SECOND: 's',
-
     };
 
-    DataFormatter.getFormatter = function(pattern) {
-
-    };
-
-    DataFormatter.tokenize = function(pattern) {
+    var tokenize_ = function(pattern) {
         var length = pattern.length;
         var tokens = [];
         var preTextToken;
         for (var i = 0; i < length;) {
-            var result = (DataFormatter.Token.CharHandler[pattern[i]] || DataFormatter.Token.CharHandler.default)(i, pattern);
-            if (result.token.type === DataFormatter.Token.Type.ERROR) {
+            var result = (Token.CharHandler[pattern[i]] || Token.CharHandler.default)(i, pattern);
+            if (result.token.type === Token.Type.ERROR) {
                 return result.token;
             } else {
-                if (result.token.type === DataFormatter.Token.Type.PLAIN_TEXT) {
+                if (result.token.type === Token.Type.PLAIN_TEXT) {
                     if (!!preTextToken) {
                         preTextToken.data += result.token.data;
                     } else {
@@ -46,15 +37,14 @@ window.mxk.DataFormatter = window.mxk.DataFormatter || {};
         return tokens;
     };
 
-    var IntegerFormatter = function(pattern) {
-        this.pattern_ = pattern;
-        this.valid_ = false;
-        this.tokens_ = [];
+    return {
+        format: function(value, pattern) {
+            var tokens = tokenize_(pattern);
+            if (!Util.isArray(tokens)) {
+                return tokens.data || 'Unknown Error';
+            }
+            var formatter = IntegerFormatter;
+            return IntegerFormatter.format(tokens, Number(value), true);
+        }
     };
-
-    IntegerFormatter.prototype.format = function(number) {
-
-    };
-
-
-})(window.mxk.DataFormatter);
+});
