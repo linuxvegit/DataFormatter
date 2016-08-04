@@ -1,4 +1,4 @@
-require(["dataformatter"], function(DataFormatter) {
+require(["data-formatter"], function(DataFormatter) {
 
     var value = document.getElementById('value');
     var format = document.getElementById('format');

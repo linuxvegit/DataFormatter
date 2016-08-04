@@ -1,4 +1,4 @@
-define(['integerformatter', 'token', 'util'], function(IntegerFormatter, Token, Util) {
+define(['util', 'token', 'decimal-formatter'], function(Util, Token, DecimalFormatter) {
     var DateSymbol = {
         MONTH: 'm',
         DATE: 'd',
@@ -43,8 +43,7 @@ define(['integerformatter', 'token', 'util'], function(IntegerFormatter, Token, 
             if (!Util.isArray(tokens)) {
                 return tokens.data || 'Unknown Error';
             }
-            var formatter = IntegerFormatter;
-            return IntegerFormatter.format(tokens, Number(value), true);
+            return DecimalFormatter.format(tokens, value, true);
         }
     };
 });
